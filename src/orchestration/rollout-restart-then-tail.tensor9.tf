@@ -1,6 +1,6 @@
 terraform {
   required_providers {
-    tensor9    = { source = "tensor9/tensor9" }
+    tensor9    = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9" }
     aws        = { source = "hashicorp/aws" }
     kubernetes = { source = "hashicorp/kubernetes" }
     null       = { source = "hashicorp/null" }
