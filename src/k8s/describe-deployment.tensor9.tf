@@ -1,6 +1,6 @@
 terraform {
   required_providers {
-    tensor9    = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9" }
+    tensor9    = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = ">= 2.40.0" }
     aws        = { source = "hashicorp/aws" }
     kubernetes = { source = "hashicorp/kubernetes" }
   }
