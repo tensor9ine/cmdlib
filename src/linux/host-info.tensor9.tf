@@ -1,8 +1,12 @@
 terraform {
   required_providers {
-    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = ">= 2.40.0" }
+    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = ">= 2.41.0" }
     null    = { source = "hashicorp/null" }
   }
+}
+
+provider "tensor9" {
+  mode = "ops"
 }
 
 resource "tensor9_command" "this" {
