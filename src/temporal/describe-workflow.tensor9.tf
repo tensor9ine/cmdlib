@@ -1,7 +1,7 @@
 terraform {
   required_providers {
-    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = ">= 2.41.0" }
-    null    = { source = "hashicorp/null" }
+    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
+    null       = { source = "hashicorp/null", version = "~> 3.2" }
   }
 }
 
@@ -43,7 +43,7 @@ resource "tensor9_command" "this" {
   display     = "Describe workflow"
   description = "Fetch the full execution history summary for a single workflow — pending activities, last event, retry attempts, current state. The go-to drill-down once a workflow ID has been identified as suspect."
   icon        = "search"
-  data_access = ["Workflows"]
+  data_access = ["CustomResources"]
 }
 
 resource "null_resource" "describe" {
@@ -51,7 +51,6 @@ resource "null_resource" "describe" {
     namespace   = var.NAMESPACE
     workflow_id = var.WORKFLOW_ID
     run_id      = var.RUN_ID
-    run_at      = timestamp()
   }
   provisioner "local-exec" {
     command = "tctl --namespace ${var.NAMESPACE} workflow describe --workflow_id ${var.WORKFLOW_ID}${var.RUN_ID == "" ? "" : " --run_id ${var.RUN_ID}"}"

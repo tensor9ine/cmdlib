@@ -1,7 +1,7 @@
 terraform {
   required_providers {
-    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = ">= 2.41.0" }
-    null    = { source = "hashicorp/null" }
+    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
+    null       = { source = "hashicorp/null", version = "~> 3.2" }
   }
 }
 
@@ -34,14 +34,13 @@ resource "tensor9_command" "this" {
   display     = "List running workflows"
   description = "Enumerate workflows currently in the Running state in the given Temporal namespace. First-line check when triaging a stuck pipeline or unexpected throughput dip."
   icon        = "search"
-  data_access = ["Workflows"]
+  data_access = ["CustomResources"]
 }
 
 resource "null_resource" "list" {
   triggers = {
     namespace = var.NAMESPACE
     limit     = var.LIMIT
-    run_at    = timestamp()
   }
   provisioner "local-exec" {
     command = "tctl --namespace ${var.NAMESPACE} workflow list --query 'ExecutionStatus=\"Running\"' --pagesize ${var.LIMIT}"

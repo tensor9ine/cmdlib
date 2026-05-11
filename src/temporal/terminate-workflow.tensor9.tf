@@ -1,7 +1,7 @@
 terraform {
   required_providers {
-    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = ">= 2.41.0" }
-    null    = { source = "hashicorp/null" }
+    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
+    null       = { source = "hashicorp/null", version = "~> 3.2" }
   }
 }
 
@@ -53,7 +53,7 @@ resource "tensor9_command" "this" {
   display      = "Terminate workflow"
   description  = "Forcibly end a workflow execution. Unlike cancel, this does not run cleanup handlers — use only when the workflow is wedged and cancellation will not progress. The reason is recorded in history for audit."
   icon         = "x-circle"
-  data_access  = ["Workflows"]
+  data_access  = ["CustomResources"]
   side_effects = ["workflow-termination"]
 }
 
@@ -63,7 +63,6 @@ resource "null_resource" "terminate" {
     workflow_id = var.WORKFLOW_ID
     run_id      = var.RUN_ID
     reason      = var.REASON
-    run_at      = timestamp()
   }
   provisioner "local-exec" {
     command = "tctl --namespace ${var.NAMESPACE} workflow terminate --workflow_id ${var.WORKFLOW_ID}${var.RUN_ID == "" ? "" : " --run_id ${var.RUN_ID}"} --reason '${var.REASON}'"

@@ -1,7 +1,7 @@
 terraform {
   required_providers {
-    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = ">= 2.41.0" }
-    null    = { source = "hashicorp/null" }
+    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
+    null       = { source = "hashicorp/null", version = "~> 3.2" }
   }
 }
 
@@ -32,7 +32,6 @@ resource "tensor9_command" "this" {
 resource "null_resource" "system_profiler" {
   triggers = {
     data_type = var.DATA_TYPE
-    run_at    = timestamp()
   }
   provisioner "local-exec" {
     command = "system_profiler ${var.DATA_TYPE}"

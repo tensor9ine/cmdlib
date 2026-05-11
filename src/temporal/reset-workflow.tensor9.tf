@@ -1,7 +1,7 @@
 terraform {
   required_providers {
-    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = ">= 2.41.0" }
-    null    = { source = "hashicorp/null" }
+    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
+    null       = { source = "hashicorp/null", version = "~> 3.2" }
   }
 }
 
@@ -52,7 +52,7 @@ resource "tensor9_command" "this" {
   display      = "Reset workflow"
   description  = "Rewind a workflow to a prior event ID and restart execution from there. Standard recovery for a workflow that failed at a specific activity once that activity is fixed — re-uses the original WorkflowID."
   icon         = "refresh"
-  data_access  = ["Workflows"]
+  data_access  = ["CustomResources"]
   side_effects = ["workflow-reset"]
 }
 
@@ -62,7 +62,6 @@ resource "null_resource" "reset" {
     workflow_id = var.WORKFLOW_ID
     event_id    = var.EVENT_ID
     reason      = var.REASON
-    run_at      = timestamp()
   }
   provisioner "local-exec" {
     command = "tctl --namespace ${var.NAMESPACE} workflow reset --workflow_id ${var.WORKFLOW_ID} --event_id ${var.EVENT_ID} --reason '${var.REASON}'"

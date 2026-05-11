@@ -1,7 +1,7 @@
 terraform {
   required_providers {
-    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = ">= 2.41.0" }
-    null    = { source = "hashicorp/null" }
+    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
+    null       = { source = "hashicorp/null", version = "~> 3.2" }
   }
 }
 
@@ -52,7 +52,7 @@ resource "tensor9_command" "this" {
   display      = "Signal workflow"
   description  = "Deliver a named signal with a JSON payload to a running workflow. Used for nudging a workflow forward (e.g. injecting an approval, releasing a wait condition) without restarting it."
   icon         = "play"
-  data_access  = ["Workflows"]
+  data_access  = ["CustomResources"]
   side_effects = ["workflow-signaled"]
 }
 
@@ -62,7 +62,6 @@ resource "null_resource" "signal" {
     workflow_id = var.WORKFLOW_ID
     signal_name = var.SIGNAL_NAME
     input_json  = var.INPUT_JSON
-    run_at      = timestamp()
   }
   provisioner "local-exec" {
     command = "tctl --namespace ${var.NAMESPACE} workflow signal --workflow_id ${var.WORKFLOW_ID} --name ${var.SIGNAL_NAME} --input '${var.INPUT_JSON}'"

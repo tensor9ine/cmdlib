@@ -1,7 +1,7 @@
 terraform {
   required_providers {
-    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = ">= 2.41.0" }
-    null    = { source = "hashicorp/null" }
+    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
+    null       = { source = "hashicorp/null", version = "~> 3.2" }
   }
 }
 
@@ -24,13 +24,12 @@ resource "tensor9_command" "this" {
   display     = "Network connections"
   description = "List open TCP/UDP sockets on the host (ss -tunap), optionally filtered by state. Read-only."
   icon        = "network"
-  data_access = ["Networking"]
+  data_access = ["Network"]
 }
 
 resource "null_resource" "ss" {
   triggers = {
     state  = var.STATE
-    run_at = timestamp()
   }
   provisioner "local-exec" {
     command = var.STATE == "all" ? "ss -tunap" : "ss -tunap state ${lower(var.STATE)}"

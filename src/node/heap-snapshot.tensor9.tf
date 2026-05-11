@@ -1,8 +1,8 @@
 terraform {
   required_providers {
-    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = ">= 2.41.0" }
-    aws     = { source = "hashicorp/aws" }
-    null    = { source = "hashicorp/null" }
+    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
+    aws        = { source = "hashicorp/aws", version = "~> 5.0" }
+    null       = { source = "hashicorp/null", version = "~> 3.2" }
   }
 }
 
@@ -72,7 +72,7 @@ resource "tensor9_command" "this" {
   display      = "Capture heap snapshot"
   description  = "Send SIGUSR2 to a Node.js process inside a Kubernetes pod to trigger a v8 heap snapshot. Node writes a Heap.*.heapsnapshot file in its CWD (typically /tmp). Use `kubectl cp` afterwards to retrieve it for analysis in Chrome DevTools."
   icon         = "activity"
-  data_access  = ["Memory"]
+  data_access  = ["Infrastructure"]
   side_effects = ["heap-snapshot"]
 }
 
@@ -83,7 +83,6 @@ resource "null_resource" "snapshot" {
     namespace = var.NAMESPACE
     container = var.CONTAINER
     pid       = var.PID
-    run_at    = timestamp()
   }
   provisioner "local-exec" {
     command = <<-EOT

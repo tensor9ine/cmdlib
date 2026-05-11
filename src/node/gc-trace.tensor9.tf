@@ -1,8 +1,8 @@
 terraform {
   required_providers {
-    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = ">= 2.41.0" }
-    aws     = { source = "hashicorp/aws" }
-    null    = { source = "hashicorp/null" }
+    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
+    aws        = { source = "hashicorp/aws", version = "~> 5.0" }
+    null       = { source = "hashicorp/null", version = "~> 3.2" }
   }
 }
 
@@ -73,7 +73,7 @@ resource "tensor9_command" "this" {
   display      = "Toggle GC tracing"
   description  = "Send SIGUSR1 to a Node process to toggle GC tracing on, sleep DURATION_SECONDS, then send SIGUSR1 again to toggle it off. NOTE: the app must have been started with --trace-gc OR have wired up a v8 GC callback for this signal to actually emit output — otherwise it's a no-op."
   icon         = "thermometer"
-  data_access  = ["Performance"]
+  data_access  = ["Metrics"]
   side_effects = ["gc-trace-toggle"]
 }
 
@@ -84,7 +84,6 @@ resource "null_resource" "gc_trace" {
     namespace = var.NAMESPACE
     container = var.CONTAINER
     duration  = var.DURATION_SECONDS
-    run_at    = timestamp()
   }
   provisioner "local-exec" {
     command = <<-EOT

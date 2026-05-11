@@ -1,8 +1,8 @@
 terraform {
   required_providers {
-    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = ">= 2.41.0" }
-    aws     = { source = "hashicorp/aws" }
-    null    = { source = "hashicorp/null" }
+    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
+    aws        = { source = "hashicorp/aws", version = "~> 5.0" }
+    null       = { source = "hashicorp/null", version = "~> 3.2" }
   }
 }
 
@@ -64,7 +64,7 @@ resource "tensor9_command" "this" {
   display     = "List active handles"
   description = "Enumerate active handles (timers, sockets, file descriptors) and active requests keeping the Node event loop alive via process._getActiveHandles / _getActiveRequests. Useful for diagnosing why a Node process won't exit cleanly."
   icon        = "search"
-  data_access = ["Performance"]
+  data_access = ["Metrics"]
 }
 
 resource "null_resource" "handles" {
@@ -73,7 +73,6 @@ resource "null_resource" "handles" {
     pod       = var.POD
     namespace = var.NAMESPACE
     container = var.CONTAINER
-    run_at    = timestamp()
   }
   provisioner "local-exec" {
     command = <<-EOT

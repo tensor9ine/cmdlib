@@ -1,7 +1,7 @@
 terraform {
   required_providers {
-    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = ">= 2.41.0" }
-    null    = { source = "hashicorp/null" }
+    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
+    null       = { source = "hashicorp/null", version = "~> 3.2" }
   }
 }
 
@@ -44,7 +44,7 @@ resource "tensor9_command" "this" {
   display     = "List failed workflows"
   description = "Diagnostic: list workflows that ended in Failed, TimedOut, or Terminated state within the last HOURS. Starting point for post-incident review or batch reset."
   icon        = "alert"
-  data_access = ["Workflows"]
+  data_access = ["CustomResources"]
 }
 
 resource "null_resource" "list" {
@@ -52,7 +52,6 @@ resource "null_resource" "list" {
     namespace = var.NAMESPACE
     hours     = var.HOURS
     limit     = var.LIMIT
-    run_at    = timestamp()
   }
   provisioner "local-exec" {
     command = "tctl --namespace ${var.NAMESPACE} workflow list --query 'ExecutionStatus IN (\"Failed\", \"TimedOut\", \"Terminated\") AND StartTime > \"-${var.HOURS}h\"' --pagesize ${var.LIMIT}"

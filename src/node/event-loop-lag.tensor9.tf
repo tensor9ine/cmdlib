@@ -1,8 +1,8 @@
 terraform {
   required_providers {
-    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = ">= 2.41.0" }
-    aws     = { source = "hashicorp/aws" }
-    null    = { source = "hashicorp/null" }
+    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
+    aws        = { source = "hashicorp/aws", version = "~> 5.0" }
+    null       = { source = "hashicorp/null", version = "~> 3.2" }
   }
 }
 
@@ -72,7 +72,7 @@ resource "tensor9_command" "this" {
   display     = "Measure event-loop lag"
   description = "Sample event-loop lag (setImmediate scheduling latency) SAMPLES times inside the target Node container. Outputs one `lag_ms: N` line per sample. Read-only; useful for diagnosing container-level CPU starvation."
   icon        = "thermometer"
-  data_access = ["Performance"]
+  data_access = ["Metrics"]
 }
 
 resource "null_resource" "probe" {
@@ -82,7 +82,6 @@ resource "null_resource" "probe" {
     namespace = var.NAMESPACE
     container = var.CONTAINER
     samples   = var.SAMPLES
-    run_at    = timestamp()
   }
   provisioner "local-exec" {
     command = <<-EOT

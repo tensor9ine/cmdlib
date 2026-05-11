@@ -1,7 +1,7 @@
 terraform {
   required_providers {
-    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = ">= 2.41.0" }
-    null    = { source = "hashicorp/null" }
+    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
+    null       = { source = "hashicorp/null", version = "~> 3.2" }
   }
 }
 
@@ -24,13 +24,12 @@ resource "tensor9_command" "this" {
   display     = "Disk usage"
   description = "Show human-readable disk usage (df -h) for mounts under MOUNT_PREFIX. Read-only."
   icon        = "disk"
-  data_access = ["Filesystem"]
+  data_access = ["Storage"]
 }
 
 resource "null_resource" "df" {
   triggers = {
     mount_prefix = var.MOUNT_PREFIX
-    run_at       = timestamp()
   }
   provisioner "local-exec" {
     command = "df -h | awk 'NR==1 || $9 ~ \"^${var.MOUNT_PREFIX}\"'"

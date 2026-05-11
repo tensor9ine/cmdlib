@@ -1,8 +1,8 @@
 terraform {
   required_providers {
-    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = ">= 2.41.0" }
-    aws     = { source = "hashicorp/aws" }
-    null    = { source = "hashicorp/null" }
+    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
+    aws        = { source = "hashicorp/aws", version = "~> 5.0" }
+    null       = { source = "hashicorp/null", version = "~> 3.2" }
   }
 }
 
@@ -83,7 +83,6 @@ resource "null_resource" "list" {
     namespace = var.NAMESPACE
     container = var.CONTAINER
     depth     = var.DEPTH
-    run_at    = timestamp()
   }
   provisioner "local-exec" {
     command = <<-EOT

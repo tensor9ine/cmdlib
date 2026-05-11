@@ -19,7 +19,11 @@ which toggles a tracing signal).
 
 Every template is identical in shape:
 
-1. `null_resource` with `triggers = { run_at = timestamp() }` so each apply re-fires.
+1. `null_resource` with a meaningful `triggers` block keyed on the
+   template's input variables (e.g. `triggers = { pod = var.POD }`).
+   No `run_at = timestamp()` is needed: the appliance creates a
+   fresh tempdir per execution with empty state, so `null_resource`
+   already runs on every apply.
 2. `provisioner "local-exec"` running:
    ```
    aws eks update-kubeconfig --name $CLUSTER --region <data.aws_region>

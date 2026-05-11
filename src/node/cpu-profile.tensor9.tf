@@ -1,8 +1,8 @@
 terraform {
   required_providers {
-    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = ">= 2.41.0" }
-    aws     = { source = "hashicorp/aws" }
-    null    = { source = "hashicorp/null" }
+    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
+    aws        = { source = "hashicorp/aws", version = "~> 5.0" }
+    null       = { source = "hashicorp/null", version = "~> 3.2" }
   }
 }
 
@@ -84,7 +84,7 @@ resource "tensor9_command" "this" {
   display     = "Capture CPU profile"
   description = "Collect a v8 CPU sampling profile from a running Node.js process via the inspector protocol. Wakes the inspector with SIGUSR1, samples for DURATION_SECONDS, then prints the .cpuprofile JSON. Read-only with respect to app state, but briefly opens the inspector port."
   icon        = "cpu"
-  data_access = ["Performance"]
+  data_access = ["Metrics"]
 }
 
 resource "null_resource" "profile" {
@@ -95,7 +95,6 @@ resource "null_resource" "profile" {
     container = var.CONTAINER
     duration  = var.DURATION_SECONDS
     port      = var.INSPECTOR_PORT
-    run_at    = timestamp()
   }
   provisioner "local-exec" {
     command = <<-EOT

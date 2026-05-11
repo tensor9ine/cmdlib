@@ -1,7 +1,7 @@
 terraform {
   required_providers {
-    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = ">= 2.41.0" }
-    null    = { source = "hashicorp/null" }
+    tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
+    null       = { source = "hashicorp/null", version = "~> 3.2" }
   }
 }
 
@@ -37,7 +37,6 @@ resource "null_resource" "log_show" {
   triggers = {
     window    = var.WINDOW
     predicate = var.PREDICATE
-    run_at    = timestamp()
   }
   provisioner "local-exec" {
     # `log show --style compact` strips the verbose default columns;
