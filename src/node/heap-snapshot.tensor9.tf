@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
-    aws        = { source = "hashicorp/aws", version = "~> 5.0" }
+    aws        = { source = "hashicorp/aws", version = "~> 6.0" }
     null       = { source = "hashicorp/null", version = "~> 3.2" }
   }
 }
@@ -87,7 +87,7 @@ resource "null_resource" "snapshot" {
   provisioner "local-exec" {
     command = <<-EOT
       set -euo pipefail
-      aws eks update-kubeconfig --name ${var.CLUSTER} --region ${data.aws_region.current.name} >/dev/null
+      aws eks update-kubeconfig --name ${var.CLUSTER} --region ${data.aws_region.current.region} >/dev/null
       kubectl exec ${var.POD} -n ${var.NAMESPACE} ${var.CONTAINER == "" ? "" : "-c ${var.CONTAINER}"} -- kill -USR2 ${var.PID}
       sleep 2
       kubectl exec ${var.POD} -n ${var.NAMESPACE} ${var.CONTAINER == "" ? "" : "-c ${var.CONTAINER}"} -- sh -c 'ls -la /tmp/Heap.*.heapsnapshot 2>/dev/null | tail -n 1'

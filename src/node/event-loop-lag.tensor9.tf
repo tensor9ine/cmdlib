@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
-    aws        = { source = "hashicorp/aws", version = "~> 5.0" }
+    aws        = { source = "hashicorp/aws", version = "~> 6.0" }
     null       = { source = "hashicorp/null", version = "~> 3.2" }
   }
 }
@@ -86,7 +86,7 @@ resource "null_resource" "probe" {
   provisioner "local-exec" {
     command = <<-EOT
       set -euo pipefail
-      aws eks update-kubeconfig --name ${var.CLUSTER} --region ${data.aws_region.current.name} >/dev/null
+      aws eks update-kubeconfig --name ${var.CLUSTER} --region ${data.aws_region.current.region} >/dev/null
       kubectl exec ${var.POD} -n ${var.NAMESPACE} ${var.CONTAINER == "" ? "" : "-c ${var.CONTAINER}"} -- \
         node -e "let n=${var.SAMPLES};(function tick(){if(!n--)return;const s=Date.now();setImmediate(()=>{console.log('lag_ms:',Date.now()-s);setTimeout(tick,100);});})();"
     EOT

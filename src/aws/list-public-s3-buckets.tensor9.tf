@@ -1,7 +1,8 @@
 terraform {
   required_providers {
     tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
-    aws        = { source = "hashicorp/aws", version = "~> 5.0" }
+    aws     = { source = "hashicorp/aws", version = "~> 6.0" }
+    null    = { source = "hashicorp/null", version = "~> 3.2" }
   }
 }
 
@@ -31,41 +32,26 @@ resource "tensor9_command" "this" {
   data_access = ["Infrastructure"]
 }
 
-data "aws_s3_buckets" "all" {}
-
-data "aws_s3_bucket_acl" "by_bucket" {
-  for_each = toset(data.aws_s3_buckets.all.buckets[*].name)
-  bucket   = each.value
-}
-
-locals {
-  public_uris = [
-    "http://acs.amazonaws.com/groups/global/AllUsers",
-    "http://acs.amazonaws.com/groups/global/AuthenticatedUsers",
-  ]
-
-  public_buckets = [
-    for name in data.aws_s3_buckets.all.buckets[*].name : {
-      bucket = name
-      grants = [
-        for g in data.aws_s3_bucket_acl.by_bucket[name].access_control_policy[0].grants : {
-          permission = g.permission
-          grantee    = try(g.grantee[0].uri, "")
-        }
-        if try(contains(local.public_uris, g.grantee[0].uri), false)
-      ]
-    }
-    if length([
-      for g in data.aws_s3_bucket_acl.by_bucket[name].access_control_policy[0].grants :
-      g if try(contains(local.public_uris, g.grantee[0].uri), false)
-    ]) > 0
-  ]
-}
-
-output "public_buckets" {
-  value = local.public_buckets
-}
-
-output "public_bucket_count" {
-  value = length(local.public_buckets)
+# aws-provider 6.x removed `aws_s3_buckets` (plural list) and
+# `aws_s3_bucket_acl` data sources; fall back to the AWS CLI via
+# local-exec. `s3api list-buckets` + `get-bucket-acl` are the same
+# read-only calls those data sources used to wrap — just returned on
+# stdout instead of as Terraform attributes.
+resource "null_resource" "scan" {
+  triggers = {
+    region = var.REGION
+  }
+  provisioner "local-exec" {
+    command = <<-EOT
+      set -euo pipefail
+      buckets=$(aws s3api list-buckets --query 'Buckets[].Name' --output text --region ${var.REGION})
+      printf 'bucket\tpermission\tgrantee\n'
+      for b in $buckets; do
+        aws s3api get-bucket-acl --bucket "$b" --region ${var.REGION} \
+          --query 'Grants[?Grantee.URI==`http://acs.amazonaws.com/groups/global/AllUsers` || Grantee.URI==`http://acs.amazonaws.com/groups/global/AuthenticatedUsers`].[Permission,Grantee.URI]' \
+          --output text 2>/dev/null \
+          | awk -v b="$b" 'NF { printf "%s\t%s\t%s\n", b, $1, $2 }' || true
+      done
+    EOT
+  }
 }

@@ -1,7 +1,8 @@
 terraform {
   required_providers {
     tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
-    aws        = { source = "hashicorp/aws", version = "~> 5.0" }
+    aws     = { source = "hashicorp/aws", version = "~> 6.0" }
+    null    = { source = "hashicorp/null", version = "~> 3.2" }
   }
 }
 
@@ -41,54 +42,36 @@ resource "tensor9_command" "this" {
   data_access = ["Infrastructure", "Metrics"]
 }
 
-data "aws_instances" "running" {
-  instance_state_names = ["running"]
-}
-
-data "aws_cloudwatch_metric_data" "cpu" {
-  for_each = toset(data.aws_instances.running.ids)
-
-  metric_data_query {
-    id          = "cpu"
-    return_data = true
-    metric_stat {
-      period = 3600
-      stat   = "Average"
-      metric {
-        metric_name = "CPUUtilization"
-        namespace   = "AWS/EC2"
-        dimensions = {
-          InstanceId = each.value
-        }
-      }
-    }
+# aws-provider 6.x removed `aws_cloudwatch_metric_data`; fall back to
+# the AWS CLI via local-exec. `cloudwatch get-metric-statistics` wraps
+# the same underlying API the data source did — just returned on
+# stdout as the per-instance 24h CPU average.
+resource "null_resource" "scan" {
+  triggers = {
+    region          = var.REGION
+    max_cpu_percent = var.MAX_CPU_PERCENT
   }
+  provisioner "local-exec" {
+    command = <<-EOT
+      set -euo pipefail
+      start=$(date -u -v-24H +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -u -d '-24 hours' +%Y-%m-%dT%H:%M:%SZ)
+      end=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
-  start_time = timeadd(timestamp(), "-24h")
-  end_time   = timestamp()
-}
+      ids=$(aws ec2 describe-instances --region ${var.REGION} \
+        --filters 'Name=instance-state-name,Values=running' \
+        --query 'Reservations[].Instances[].InstanceId' --output text)
 
-output "idle_instances" {
-  value = [
-    for id in data.aws_instances.running.ids : {
-      instance_id = id
-      avg_cpu     = try(
-        length(data.aws_cloudwatch_metric_data.cpu[id].metric_data_results[0].values) > 0
-          ? (
-              sum(data.aws_cloudwatch_metric_data.cpu[id].metric_data_results[0].values)
-              / length(data.aws_cloudwatch_metric_data.cpu[id].metric_data_results[0].values)
-            )
-          : 0,
-        0
-      )
-    }
-    if try(
-      length(data.aws_cloudwatch_metric_data.cpu[id].metric_data_results[0].values) > 0
-        && (
-          sum(data.aws_cloudwatch_metric_data.cpu[id].metric_data_results[0].values)
-          / length(data.aws_cloudwatch_metric_data.cpu[id].metric_data_results[0].values)
-        ) < var.MAX_CPU_PERCENT,
-      false
-    )
-  ]
+      printf 'instance_id\tavg_cpu_pct\n'
+      for id in $ids; do
+        avg=$(aws cloudwatch get-metric-statistics --region ${var.REGION} \
+          --namespace AWS/EC2 --metric-name CPUUtilization \
+          --dimensions Name=InstanceId,Value="$id" \
+          --start-time "$start" --end-time "$end" \
+          --period 3600 --statistics Average \
+          --query 'Datapoints[].Average' --output text \
+          | awk 'BEGIN{s=0;n=0} {for(i=1;i<=NF;i++){s+=$i;n++}} END{if(n>0) printf "%.2f", s/n; else print "0"}')
+        awk -v id="$id" -v avg="$avg" -v cap="${var.MAX_CPU_PERCENT}" 'BEGIN{ if (avg+0 < cap+0) printf "%s\t%s\n", id, avg }'
+      done
+    EOT
+  }
 }

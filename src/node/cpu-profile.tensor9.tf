@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
-    aws        = { source = "hashicorp/aws", version = "~> 5.0" }
+    aws        = { source = "hashicorp/aws", version = "~> 6.0" }
     null       = { source = "hashicorp/null", version = "~> 3.2" }
   }
 }
@@ -99,7 +99,7 @@ resource "null_resource" "profile" {
   provisioner "local-exec" {
     command = <<-EOT
       set -euo pipefail
-      aws eks update-kubeconfig --name ${var.CLUSTER} --region ${data.aws_region.current.name} >/dev/null
+      aws eks update-kubeconfig --name ${var.CLUSTER} --region ${data.aws_region.current.region} >/dev/null
       KEXEC="kubectl exec ${var.POD} -n ${var.NAMESPACE} ${var.CONTAINER == "" ? "" : "-c ${var.CONTAINER}"} --"
       # Step 1: wake inspector (idempotent — SIGUSR1 enables if disabled).
       $KEXEC kill -USR1 1 || true

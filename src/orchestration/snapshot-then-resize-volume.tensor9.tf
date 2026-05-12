@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     tensor9    = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
-    aws        = { source = "hashicorp/aws", version = "~> 5.0" }
+    aws        = { source = "hashicorp/aws", version = "~> 6.0" }
     kubernetes = { source = "hashicorp/kubernetes", version = "~> 2.20" }
     null       = { source = "hashicorp/null", version = "~> 3.2" }
   }
@@ -64,7 +64,7 @@ resource "null_resource" "modify_volume" {
     command = <<-EOT
       set -euo pipefail
       aws ec2 modify-volume \
-        --region ${data.aws_region.current.name} \
+        --region ${data.aws_region.current.region} \
         --volume-id ${var.VOLUME_ID} \
         --size ${var.NEW_SIZE_GB}
     EOT

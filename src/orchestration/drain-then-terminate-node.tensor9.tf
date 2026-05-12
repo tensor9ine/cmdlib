@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     tensor9    = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
-    aws        = { source = "hashicorp/aws", version = "~> 5.0" }
+    aws        = { source = "hashicorp/aws", version = "~> 6.0" }
     kubernetes = { source = "hashicorp/kubernetes", version = "~> 2.20" }
     null       = { source = "hashicorp/null", version = "~> 3.2" }
   }
@@ -78,7 +78,7 @@ resource "null_resource" "drain" {
   provisioner "local-exec" {
     command = <<-EOT
       set -euo pipefail
-      aws eks update-kubeconfig --name ${var.CLUSTER} --region ${data.aws_region.current.name} >/dev/null
+      aws eks update-kubeconfig --name ${var.CLUSTER} --region ${data.aws_region.current.region} >/dev/null
       kubectl drain ${var.NODE_NAME} \
         --ignore-daemonsets \
         --delete-emptydir-data \
@@ -99,7 +99,7 @@ resource "null_resource" "terminate" {
     command = <<-EOT
       set -euo pipefail
       aws ec2 terminate-instances \
-        --region ${data.aws_region.current.name} \
+        --region ${data.aws_region.current.region} \
         --instance-ids ${var.INSTANCE_ID}
     EOT
   }
