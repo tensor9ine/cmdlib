@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
-    aws        = { source = "hashicorp/aws", version = "~> 6.0" }
+    aws     = { source = "hashicorp/aws", version = "~> 6.0" }
   }
 }
 
@@ -43,8 +43,8 @@ resource "aws_iam_access_key" "new" {
 }
 
 resource "aws_iam_access_key" "old_disabled" {
-  user    = var.USER_NAME
-  status  = "Inactive"
+  user   = var.USER_NAME
+  status = "Inactive"
 
   # Prevent terraform from creating a fresh key for this resource — pin to the
   # existing one via import-style id. In practice the operator imports this

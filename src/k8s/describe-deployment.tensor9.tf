@@ -40,7 +40,7 @@ variable "NAMESPACE" {
   }
 }
 
-data "aws_eks_cluster"      "target" { name = var.CLUSTER }
+data "aws_eks_cluster" "target" { name = var.CLUSTER }
 data "aws_eks_cluster_auth" "target" { name = var.CLUSTER }
 
 provider "kubernetes" {
@@ -68,13 +68,13 @@ data "kubernetes_resource" "deployment" {
 
 output "deployment" {
   value = {
-    name              = try(data.kubernetes_resource.deployment.object.metadata.name, null)
-    namespace         = try(data.kubernetes_resource.deployment.object.metadata.namespace, null)
-    generation        = try(data.kubernetes_resource.deployment.object.metadata.generation, null)
-    desired_replicas  = try(data.kubernetes_resource.deployment.object.spec.replicas, null)
-    strategy          = try(data.kubernetes_resource.deployment.object.spec.strategy.type, null)
-    selector          = try(data.kubernetes_resource.deployment.object.spec.selector.matchLabels, {})
-    images            = try([for c in data.kubernetes_resource.deployment.object.spec.template.spec.containers : c.image], [])
+    name             = try(data.kubernetes_resource.deployment.object.metadata.name, null)
+    namespace        = try(data.kubernetes_resource.deployment.object.metadata.namespace, null)
+    generation       = try(data.kubernetes_resource.deployment.object.metadata.generation, null)
+    desired_replicas = try(data.kubernetes_resource.deployment.object.spec.replicas, null)
+    strategy         = try(data.kubernetes_resource.deployment.object.spec.strategy.type, null)
+    selector         = try(data.kubernetes_resource.deployment.object.spec.selector.matchLabels, {})
+    images           = try([for c in data.kubernetes_resource.deployment.object.spec.template.spec.containers : c.image], [])
     status = {
       replicas             = try(data.kubernetes_resource.deployment.object.status.replicas, 0)
       ready_replicas       = try(data.kubernetes_resource.deployment.object.status.readyReplicas, 0)

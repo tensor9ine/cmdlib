@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
-    null       = { source = "hashicorp/null", version = "~> 3.2" }
+    null    = { source = "hashicorp/null", version = "~> 3.2" }
   }
 }
 
@@ -43,8 +43,8 @@ resource "tensor9_command" "this" {
 
 resource "null_resource" "tail" {
   triggers = {
-    path   = var.PATH
-    lines  = var.LINES
+    path  = var.PATH
+    lines = var.LINES
   }
   provisioner "local-exec" {
     command = "tail -n ${var.LINES} '${var.PATH}'"

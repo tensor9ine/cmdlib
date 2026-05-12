@@ -51,9 +51,9 @@ variable "TAIL_LINES" {
   }
 }
 
-data "aws_region"           "current" {}
-data "aws_eks_cluster"      "target"  { name = var.CLUSTER }
-data "aws_eks_cluster_auth" "target"  { name = var.CLUSTER }
+data "aws_region" "current" {}
+data "aws_eks_cluster" "target" { name = var.CLUSTER }
+data "aws_eks_cluster_auth" "target" { name = var.CLUSTER }
 
 provider "kubernetes" {
   host                   = data.aws_eks_cluster.target.endpoint

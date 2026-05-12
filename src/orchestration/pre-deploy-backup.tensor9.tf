@@ -59,9 +59,9 @@ variable "PARAMETER_KEY" {
   }
 }
 
-data "aws_region"           "current" {}
-data "aws_eks_cluster"      "target"  { name = var.CLUSTER }
-data "aws_eks_cluster_auth" "target"  { name = var.CLUSTER }
+data "aws_region" "current" {}
+data "aws_eks_cluster" "target" { name = var.CLUSTER }
+data "aws_eks_cluster_auth" "target" { name = var.CLUSTER }
 
 provider "kubernetes" {
   host                   = data.aws_eks_cluster.target.endpoint
@@ -107,9 +107,9 @@ resource "null_resource" "scale_to_zero" {
   depends_on = [kubernetes_annotations.quiesce_marker]
 
   triggers = {
-    deployment   = var.API_DEPLOYMENT
-    namespace    = var.NAMESPACE
-    quiesced_at  = kubernetes_annotations.quiesce_marker.annotations["tensor9.com/quiesced-at"]
+    deployment  = var.API_DEPLOYMENT
+    namespace   = var.NAMESPACE
+    quiesced_at = kubernetes_annotations.quiesce_marker.annotations["tensor9.com/quiesced-at"]
   }
   provisioner "local-exec" {
     command = <<-EOT

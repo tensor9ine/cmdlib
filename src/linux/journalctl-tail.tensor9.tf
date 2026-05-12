@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
-    null       = { source = "hashicorp/null", version = "~> 3.2" }
+    null    = { source = "hashicorp/null", version = "~> 3.2" }
   }
 }
 
@@ -48,9 +48,9 @@ resource "tensor9_command" "this" {
 
 resource "null_resource" "journal" {
   triggers = {
-    unit   = var.UNIT
-    lines  = var.LINES
-    since  = var.SINCE
+    unit  = var.UNIT
+    lines = var.LINES
+    since = var.SINCE
   }
   provisioner "local-exec" {
     command = "journalctl -u ${var.UNIT} --no-pager --since \"${var.SINCE}\" -n ${var.LINES}"

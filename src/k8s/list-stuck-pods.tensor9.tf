@@ -37,7 +37,7 @@ variable "MIN_AGE_SECONDS" {
   description = "Minimum pod age (seconds) before it counts as stuck"
 }
 
-data "aws_eks_cluster"      "target" { name = var.CLUSTER }
+data "aws_eks_cluster" "target" { name = var.CLUSTER }
 data "aws_eks_cluster_auth" "target" { name = var.CLUSTER }
 
 provider "kubernetes" {
@@ -68,6 +68,6 @@ output "stuck_pods" {
       name      = p.metadata.name
       reason    = try(p.status.containerStatuses[0].state.waiting.reason, "Unknown")
     }
-    if (timestamp() - p.metadata.creationTimestamp) > var.MIN_AGE_SECONDS
+    if(timestamp() - p.metadata.creationTimestamp) > var.MIN_AGE_SECONDS
   ]
 }

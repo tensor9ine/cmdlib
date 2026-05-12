@@ -1,8 +1,8 @@
 terraform {
   required_providers {
     tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
-    aws        = { source = "hashicorp/aws", version = "~> 6.0" }
-    null       = { source = "hashicorp/null", version = "~> 3.2" }
+    aws     = { source = "hashicorp/aws", version = "~> 6.0" }
+    null    = { source = "hashicorp/null", version = "~> 3.2" }
   }
 }
 
@@ -112,7 +112,7 @@ resource "null_resource" "profile" {
         const WS=require('ws');const ws=new WS('$WSURL');let id=0;
         const send=(m)=>ws.send(JSON.stringify({id:++id,...m}));
         ws.on('open',()=>{send({method:'Profiler.enable'});send({method:'Profiler.start'});
-          setTimeout(()=>send({method:'Profiler.stop'}),${var.DURATION_SECONDS*1000});});
+          setTimeout(()=>send({method:'Profiler.stop'}),${var.DURATION_SECONDS * 1000});});
         ws.on('message',(d)=>{const m=JSON.parse(d);if(m.result&&m.result.profile){console.log(JSON.stringify(m.result.profile));ws.close();process.exit(0);}});
       "
     EOT

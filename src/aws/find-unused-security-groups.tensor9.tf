@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
-    aws        = { source = "hashicorp/aws", version = "~> 6.0" }
+    aws     = { source = "hashicorp/aws", version = "~> 6.0" }
   }
 }
 
@@ -52,7 +52,7 @@ locals {
   unused_sg_ids = [
     for id in data.aws_security_groups.all.ids : id
     if length(data.aws_network_interfaces.by_sg[id].ids) == 0
-       && data.aws_security_group.by_id[id].name != "default"
+    && data.aws_security_group.by_id[id].name != "default"
   ]
 }
 

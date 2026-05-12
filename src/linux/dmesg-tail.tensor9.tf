@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     tensor9 = { source = "tf-providers.prod-1.tensor9.com/tensor9/tensor9", version = "~> 2.41" }
-    null       = { source = "hashicorp/null", version = "~> 3.2" }
+    null    = { source = "hashicorp/null", version = "~> 3.2" }
   }
 }
 
@@ -29,7 +29,7 @@ resource "tensor9_command" "this" {
 
 resource "null_resource" "dmesg" {
   triggers = {
-    lines  = var.LINES
+    lines = var.LINES
   }
   provisioner "local-exec" {
     command = "dmesg --ctime | tail -n ${var.LINES}"

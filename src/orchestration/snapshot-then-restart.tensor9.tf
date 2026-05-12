@@ -50,7 +50,7 @@ variable "NAMESPACE" {
   }
 }
 
-data "aws_eks_cluster"      "target" { name = var.CLUSTER }
+data "aws_eks_cluster" "target" { name = var.CLUSTER }
 data "aws_eks_cluster_auth" "target" { name = var.CLUSTER }
 
 provider "kubernetes" {
