@@ -39,6 +39,7 @@ fleets) and the operator picks per-invocation.
 
 | Template | Type | Description |
 |---|---|---|
+| `list-pods.tensor9.tf`                | read-only | Every pod in a namespace with phase, node, IP, ready/restart counts |
 | `list-stuck-pods.tensor9.tf`          | read-only | Pods that haven't been Ready past `MIN_AGE_SECONDS` |
 | `tail-pod-logs.tensor9.tf`            | read-only | Trailing 2 MiB of a pod's logs (up to 20k lines) |
 | `get-events.tensor9.tf`               | read-only | Most recent Warning events in a namespace |
