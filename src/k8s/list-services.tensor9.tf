@@ -24,7 +24,7 @@ variable "CLUSTER" {
 variable "NAMESPACE" {
   type        = string
   default     = "default"
-  description = "Kubernetes namespace to list pods from"
+  description = "Kubernetes namespace to list services from"
   validation {
     condition     = can(regex("^[a-z0-9-]+$", var.NAMESPACE))
     error_message = "NAMESPACE must be a DNS-safe namespace name"
@@ -41,33 +41,42 @@ provider "kubernetes" {
 }
 
 resource "tensor9_command" "this" {
-  name        = "list-pods"
-  display     = "List pods"
-  description = "Every pod in NAMESPACE with phase, node assignment, IP, and ready-container counts — quick `kubectl get pods -o wide` equivalent"
+  name        = "list-services"
+  display     = "List services"
+  description = "Every Service in NAMESPACE with type, clusterIP, externalIPs, exposed ports, and selector — answers `is anything routable to this workload?`. Quick `kubectl get svc -o wide` equivalent."
   icon        = "list"
   data_access = ["Infrastructure"]
 }
 
-data "kubernetes_resources" "pods" {
+data "kubernetes_resources" "services" {
   api_version = "v1"
-  kind        = "Pod"
+  kind        = "Service"
   namespace   = var.NAMESPACE
 }
 
-output "pods" {
+output "services" {
   value = [
-    for p in data.kubernetes_resources.pods.objects : {
-      namespace = p.metadata.namespace
-      name      = p.metadata.name
-      phase     = try(p.status.phase, "Unknown")
-      node      = try(p.spec.nodeName, "")
-      pod_ip    = try(p.status.podIP, "")
-      ready = format("%d/%d",
-        length([for c in try(p.status.containerStatuses, []) : c if try(c.ready, false)]),
-        length(try(p.status.containerStatuses, [])),
-      )
-      restarts = sum(concat([0], [for c in try(p.status.containerStatuses, []) : try(c.restartCount, 0)]))
-      created  = try(p.metadata.creationTimestamp, "")
+    for s in data.kubernetes_resources.services.objects : {
+      name          = try(s.metadata.name, "")
+      namespace     = try(s.metadata.namespace, "")
+      type          = try(s.spec.type, "ClusterIP")
+      cluster_ip    = try(s.spec.clusterIP, "")
+      external_ips  = try(s.spec.externalIPs, [])
+      external_name = try(s.spec.externalName, "")
+      selector      = try(s.spec.selector, {})
+      ports = try([
+        for p in s.spec.ports : {
+          name        = try(p.name, "")
+          port        = try(p.port, null)
+          target_port = try(tostring(p.targetPort), "")
+          node_port   = try(p.nodePort, null)
+          protocol    = try(p.protocol, "TCP")
+        }
+      ], [])
+      load_balancer_ingress = try([
+        for lb in s.status.loadBalancer.ingress : try(lb.hostname, try(lb.ip, ""))
+      ], [])
+      created = try(s.metadata.creationTimestamp, "")
     }
   ]
 }

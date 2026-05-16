@@ -39,15 +39,22 @@ fleets) and the operator picks per-invocation.
 
 | Template | Type | Description |
 |---|---|---|
+| `list-nodes.tensor9.tf`               | read-only | Cluster-wide node inventory: capacity, allocatable, taints, conditions, kernel/kubelet versions |
 | `list-pods.tensor9.tf`                | read-only | Every pod in a namespace with phase, node, IP, ready/restart counts |
+| `list-services.tensor9.tf`            | read-only | Every Service in a namespace with type, clusterIP, ports, selector, and LB ingress |
 | `list-stuck-pods.tensor9.tf`          | read-only | Pods that haven't been Ready past `MIN_AGE_SECONDS` |
 | `tail-pod-logs.tensor9.tf`            | read-only | Trailing 2 MiB of a pod's logs (up to 20k lines) |
+| `top-nodes.tensor9.tf`                | read-only | `kubectl top nodes` — current CPU + memory usage per node (needs metrics-server) |
+| `top-pods.tensor9.tf`                 | read-only | `kubectl top pods` — current CPU + memory usage per pod (needs metrics-server) |
 | `get-events.tensor9.tf`               | read-only | Most recent Warning events in a namespace |
 | `describe-deployment.tensor9.tf`      | read-only | Full Deployment status, conditions, replica counts |
+| `describe-pod.tensor9.tf`             | read-only | Single-pod drill-down: phase, conditions, container states (image, ready, restartCount, waiting/terminated reasons) |
 | `restart-deployment.tensor9.tf`       | mutating  | Rolling restart via `kubectl.kubernetes.io/restartedAt` |
 | `restart-pods-by-label.tensor9.tf`    | mutating  | Delete pods matching a label selector |
 | `scale-deployment.tensor9.tf`         | mutating  | Set a Deployment's replica count |
+| `rollback-deployment.tensor9.tf`      | mutating  | Revert a Deployment to its previous (or specified) revision via `kubectl rollout undo` |
 | `drain-node.tensor9.tf`               | mutating  | Cordon a node and evict its pods (skipping DaemonSets) |
+| `delete-pod.tensor9.tf`               | mutating  | Delete a single pod by name; `GRACE_PERIOD_SECONDS=0` forces immediate delete for stuck-in-Terminating pods |
 | `delete-failed-evicted-pods.tensor9.tf` | mutating | GC pods in Failed/Evicted/Succeeded phase |
 
 Read-only templates declare `data_access` only. Mutating templates also
