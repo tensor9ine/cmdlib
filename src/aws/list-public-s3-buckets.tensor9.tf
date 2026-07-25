@@ -30,6 +30,12 @@ resource "tensor9_command" "this" {
   description = "Diagnostic: list S3 buckets in this account whose ACL grants READ or WRITE to AllUsers / AuthenticatedUsers. Read-only."
   icon        = "search"
   data_access = ["Infrastructure"]
+  example_output = <<-EOT
+    bucket                 permission  grantee
+    acme-prod-assets       READ        http://acs.amazonaws.com/groups/global/AllUsers
+    acme-public-downloads  READ        http://acs.amazonaws.com/groups/global/AllUsers
+    acme-legacy-logs       WRITE       http://acs.amazonaws.com/groups/global/AuthenticatedUsers
+  EOT
 }
 
 # aws-provider 6.x removed `aws_s3_buckets` (plural list) and

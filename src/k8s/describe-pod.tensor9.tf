@@ -55,6 +55,40 @@ resource "tensor9_command" "this" {
   description = "Single-pod drill-down: phase, conditions, scheduling, per-container state (image, ready, restartCount, waiting/terminated reasons). Read-only equivalent of `kubectl describe pod` minus the events tail — pair with `get-events` for the timeline."
   icon        = "info"
   data_access = ["Infrastructure"]
+  example_output = <<-EOT
+    Name:             api-7f9c8d4b6-xk2m9
+    Namespace:        default
+    Priority:         0
+    Service Account:  api
+    Node:             ip-10-0-12-34.ec2.internal/10.0.12.34
+    Start Time:       Wed, 22 Jul 2026 09:14:32 +0000
+    Labels:           app=api
+                      pod-template-hash=7f9c8d4b6
+    Status:           Running
+    IP:               10.0.12.77
+    Controlled By:    ReplicaSet/api-7f9c8d4b6
+    Containers:
+      api:
+        Container ID:  containerd://a1b2c3d4e5f67890abcd1234ef567890a1b2c3d4e5f67890abcd1234ef56
+        Image:         acme/api:v2.4.0
+        Image ID:      acme/api@sha256:9f2c1a7d4e6b8c0a2f4d6e8b0c2a4f6d8e0b2c4a6f8d0e2b4c6a8f0d2e4b6c8
+        Port:          8080/TCP
+        State:         Running
+          Started:     Wed, 22 Jul 2026 09:14:35 +0000
+        Ready:         True
+        Restart Count: 0
+        Requests:
+          cpu:     250m
+          memory:  256Mi
+        Liveness:  http-get http://:8080/healthz delay=10s timeout=1s period=10s #success=1 #failure=3
+    Conditions:
+      Type              Status
+      Initialized       True
+      Ready             True
+      ContainersReady   True
+      PodScheduled      True
+    QoS Class:        Burstable
+  EOT
 }
 
 data "kubernetes_resource" "pod" {

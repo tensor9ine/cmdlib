@@ -68,6 +68,18 @@ resource "tensor9_command" "this" {
   icon         = "refresh"
   data_access  = ["Infrastructure", "Logs"]
   side_effects = ["pod-restarts"]
+  example_output = <<-EOT
+    ==> Step 1/2: Rolling restart of deployment.apps/web in namespace production
+        annotated deployment.apps/web: kubectl.kubernetes.io/restartedAt=2026-07-25T14:38:52Z
+    ==> Step 2/2: Tailing 200 lines from new pods (app=web), after 10s settle
+        Updated context arn:aws:eks:us-east-1:123456789012:cluster/acme-prod in ~/.kube/config
+        [pod/web-6f4b7c9d84-qmx7t/web] 2026-07-25T14:39:05.114Z INFO  starting web v2026.7.25 (commit 9f3a1c2)
+        [pod/web-6f4b7c9d84-qmx7t/web] 2026-07-25T14:39:05.982Z INFO  listening on :8080
+        [pod/web-6f4b7c9d84-wr2ns/web] 2026-07-25T14:39:06.201Z INFO  starting web v2026.7.25 (commit 9f3a1c2)
+        [pod/web-6f4b7c9d84-wr2ns/web] 2026-07-25T14:39:06.884Z INFO  listening on :8080
+        [pod/web-6f4b7c9d84-zx9pl/web] 2026-07-25T14:39:07.037Z INFO  listening on :8080
+    ✓ Completed in 21s — web restarted, 3 new pods logging, no CrashLoopBackOff
+  EOT
 }
 
 resource "kubernetes_annotations" "rollout_trigger" {

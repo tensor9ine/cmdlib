@@ -30,6 +30,13 @@ resource "tensor9_command" "this" {
   description = "Find EBS snapshots owned by this account that are older than DAYS — input for snapshot-cleanup audits. Read-only."
   icon        = "search"
   data_access = ["Storage"]
+  example_output = <<-EOT
+    snapshot_id             volume_id                start_time                size_gib
+    snap-0a1b2c3d4e5f6a7b8  vol-0f1e2d3c4b5a69788    2026-05-14T03:12:07.000Z  200
+    snap-0b2c3d4e5f6a7b8c9  vol-0a9b8c7d6e5f40312    2026-04-02T22:47:51.000Z  100
+
+    cutoff: 2026-06-25T14:30:12Z
+  EOT
 }
 
 # aws-provider 6.x removed the `aws_ebs_snapshots` (plural) data

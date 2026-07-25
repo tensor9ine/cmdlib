@@ -85,6 +85,10 @@ resource "tensor9_command" "this" {
   description = "Collect a v8 CPU sampling profile from a running Node.js process via the inspector protocol. Wakes the inspector with SIGUSR1, samples for DURATION_SECONDS, then prints the .cpuprofile JSON. Read-only with respect to app state, but briefly opens the inspector port."
   icon        = "cpu"
   data_access = ["Metrics"]
+  example_output = <<-EOT
+    inspector_ws=ws://localhost:9229/8f3a1c2e-6b0d-4a4f-9c31-2d7e5a9b0f14
+    {"nodes":[{"id":1,"callFrame":{"functionName":"(root)","scriptId":"0","url":"","lineNumber":-1,"columnNumber":-1},"hitCount":0,"children":[2,3,4]},{"id":2,"callFrame":{"functionName":"(program)","scriptId":"0","url":"","lineNumber":-1,"columnNumber":-1},"hitCount":12},{"id":3,"callFrame":{"functionName":"(idle)","scriptId":"0","url":"","lineNumber":-1,"columnNumber":-1},"hitCount":3201},{"id":4,"callFrame":{"functionName":"query","scriptId":"142","url":"file:///app/node_modules/pg/lib/client.js","lineNumber":508,"columnNumber":22},"hitCount":4820,"children":[5]},{"id":5,"callFrame":{"functionName":"parse","scriptId":"151","url":"file:///app/node_modules/pg-protocol/dist/parser.js","lineNumber":97,"columnNumber":14},"hitCount":1948}],"startTime":264518993217,"endTime":264528994061,"samples":[3,3,4,4,5,4,3,2],"timeDeltas":[112,98,101,99,103,97,100,102]}
+  EOT
 }
 
 resource "null_resource" "profile" {

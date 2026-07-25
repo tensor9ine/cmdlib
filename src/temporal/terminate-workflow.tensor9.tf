@@ -55,6 +55,16 @@ resource "tensor9_command" "this" {
   icon         = "x-circle"
   data_access  = ["CustomResources"]
   side_effects = ["workflow-termination"]
+  example_output = <<-EOT
+    Terminate workflow succeeded.
+
+    Namespace   default
+    WorkflowId  order-8f31c2a9
+    RunId       01912f3a-6b7c-4d2e-9a1b-0c3d4e5f6a7b
+    Reason      operator-terminated
+
+    Status is now Terminated; WorkflowExecutionTerminated recorded in history (eventId 49). Cleanup handlers were NOT run.
+  EOT
 }
 
 resource "null_resource" "terminate" {

@@ -66,6 +66,15 @@ resource "tensor9_command" "this" {
   icon         = "shield-check"
   data_access  = ["Infrastructure", "Storage"]
   side_effects = ["ebs-snapshot", "pod-restarts"]
+  example_output = <<-EOT
+    ==> Step 1/2: Snapshotting DB volume vol-0f1e2d3c4b5a69788
+        snapshot snap-0a1b2c3d4e5f6a7b8 created from vol-0f1e2d3c4b5a69788
+        waiting for state=completed... completed (22s)
+    ==> Step 2/2: Restarting deployment.apps/api in namespace production
+        annotated deployment.apps/api: kubectl.kubernetes.io/restartedAt=2026-07-25T14:44:10Z
+        annotated deployment.apps/api: tensor9.com/snapshot-id=snap-0a1b2c3d4e5f6a7b8
+    ✓ Completed in 26s — snapshot snap-0a1b2c3d4e5f6a7b8, api restarted
+  EOT
 }
 
 resource "aws_ebs_snapshot" "db" {

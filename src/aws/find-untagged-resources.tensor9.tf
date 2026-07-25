@@ -39,6 +39,19 @@ resource "tensor9_command" "this" {
   description = "List EC2 instances and EBS volumes in REGION that are missing the REQUIRED_TAG key. Read-only audit input for ownership/cost-allocation reviews."
   icon        = "search"
   data_access = ["Infrastructure"]
+  example_output = <<-EOT
+    required_tag = Owner
+
+    untagged_instances:
+    instance_id          name
+    i-0a1b2c3d4e5f6a7b8  acme-prod-web-1
+    i-0b2c3d4e5f6a7b8c9
+
+    untagged_volumes:
+    volume_id              size_gib
+    vol-0f1e2d3c4b5a69788  200
+    vol-0a9b8c7d6e5f40312  100
+  EOT
 }
 
 # All instances + volumes; we filter for "missing tag" in the output expressions

@@ -49,6 +49,12 @@ resource "tensor9_command" "this" {
   icon         = "refresh"
   data_access  = ["Infrastructure"]
   side_effects = ["pod-restarts"]
+  example_output = <<-EOT
+    pod "api-7f9c8d4b6-xk2m9" deleted
+    pod "api-7f9c8d4b6-p8wqz" deleted
+    pod "api-7f9c8d4b6-r3ntv" deleted
+    pod "api-7f9c8d4b6-9jhcd" deleted
+  EOT
 }
 
 resource "null_resource" "restart" {

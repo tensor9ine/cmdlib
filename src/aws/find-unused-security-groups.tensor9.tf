@@ -29,6 +29,13 @@ resource "tensor9_command" "this" {
   description = "List security groups in REGION that are not attached to any ENI — input for SG-cleanup audits. Read-only."
   icon        = "search"
   data_access = ["Infrastructure"]
+  example_output = <<-EOT
+    unused_count = 2
+
+    group_id              name                 vpc_id                 description
+    sg-0a1b2c3d4e5f6a7b8  acme-bastion-legacy  vpc-0f1e2d3c4b5a69788  legacy bastion (decommissioned)
+    sg-0b2c3d4e5f6a7b8c9  acme-loadtest-tmp    vpc-0f1e2d3c4b5a69788  temporary load-test workers
+  EOT
 }
 
 data "aws_security_groups" "all" {}

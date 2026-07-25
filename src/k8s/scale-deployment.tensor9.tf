@@ -65,6 +65,9 @@ resource "tensor9_command" "this" {
   icon         = "scale"
   data_access  = ["Infrastructure"]
   side_effects = ["pod-scaling"]
+  example_output = <<-EOT
+    deployment.apps/web scaled
+  EOT
 }
 
 resource "kubernetes_annotations" "scale_marker" {

@@ -46,6 +46,13 @@ resource "tensor9_command" "this" {
   description = "Every Service in NAMESPACE with type, clusterIP, externalIPs, exposed ports, and selector — answers `is anything routable to this workload?`. Quick `kubectl get svc -o wide` equivalent."
   icon        = "list"
   data_access = ["Infrastructure"]
+  example_output = <<-EOT
+    NAME         TYPE           CLUSTER-IP      EXTERNAL-IP                                            PORT(S)        AGE   SELECTOR
+    api          ClusterIP      172.20.84.12    <none>                                                 8080/TCP       28d   app=api
+    web          LoadBalancer   172.20.140.55   a1b2c3d4e5f6-1234567890.us-east-1.elb.amazonaws.com    80:31280/TCP   28d   app=web
+    worker       ClusterIP      None            <none>                                                 <none>         28d   app=worker
+    kubernetes   ClusterIP      172.20.0.1      <none>                                                 443/TCP        28d   <none>
+  EOT
 }
 
 data "kubernetes_resources" "services" {

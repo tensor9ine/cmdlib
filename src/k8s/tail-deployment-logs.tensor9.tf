@@ -78,6 +78,15 @@ resource "tensor9_command" "this" {
   description = "Aggregate recent logs from every pod of a Kubernetes Deployment for triage. Read-only."
   icon        = "logs"
   data_access = ["Logs"]
+  example_output = <<-EOT
+    [pod/api-7f9c8d4b6-xk2m9/api] 2026-07-25T14:31:02.114Z INFO  starting api server on :8080 (build v2.4.0)
+    [pod/api-7f9c8d4b6-xk2m9/api] 2026-07-25T14:31:44.902Z INFO  GET /v1/orders 200 12ms
+    [pod/api-7f9c8d4b6-p8wqz/api] 2026-07-25T14:31:45.221Z INFO  GET /v1/orders/8821 200 7ms
+    [pod/api-7f9c8d4b6-r3ntv/api] 2026-07-25T14:32:01.550Z ERROR db query failed: dial tcp 10.0.20.15:5432: i/o timeout
+    [pod/api-7f9c8d4b6-r3ntv/api] 2026-07-25T14:32:01.551Z WARN  retrying in 500ms (attempt 2/5)
+    [pod/api-7f9c8d4b6-9jhcd/api] 2026-07-25T14:32:03.887Z INFO  POST /v1/checkout 201 34ms
+    [pod/api-7f9c8d4b6-xk2m9/api] 2026-07-25T14:32:05.010Z INFO  GET /healthz 200 1ms
+  EOT
 }
 
 resource "null_resource" "tail" {

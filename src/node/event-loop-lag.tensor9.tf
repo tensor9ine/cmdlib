@@ -73,6 +73,18 @@ resource "tensor9_command" "this" {
   description = "Sample event-loop lag (setImmediate scheduling latency) SAMPLES times inside the target Node container. Outputs one `lag_ms: N` line per sample. Read-only; useful for diagnosing container-level CPU starvation."
   icon        = "thermometer"
   data_access = ["Metrics"]
+  example_output = <<-EOT
+    lag_ms: 1
+    lag_ms: 0
+    lag_ms: 2
+    lag_ms: 1
+    lag_ms: 14
+    lag_ms: 3
+    lag_ms: 1
+    lag_ms: 47
+    lag_ms: 2
+    lag_ms: 1
+  EOT
 }
 
 resource "null_resource" "probe" {

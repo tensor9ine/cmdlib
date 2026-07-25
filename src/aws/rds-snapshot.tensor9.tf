@@ -37,6 +37,21 @@ resource "tensor9_command" "this" {
   icon         = "shield-check"
   data_access  = ["Storage"]
   side_effects = ["rds-snapshot"]
+  example_output = <<-EOT
+    Created RDS snapshot acme-prod-db-20260725-143012-ad-hoc from instance acme-prod-db.
+
+    DBSnapshotIdentifier  acme-prod-db-20260725-143012-ad-hoc
+    DBInstanceIdentifier  acme-prod-db
+    Engine                postgres 15.7
+    Status                available
+    SnapshotType          manual
+    AllocatedStorage      200 GiB
+    SnapshotCreateTime    2026-07-25T14:30:12Z
+
+    snapshot_identifier = acme-prod-db-20260725-143012-ad-hoc
+    snapshot_arn        = arn:aws:rds:us-east-1:123456789012:snapshot:acme-prod-db-20260725-143012-ad-hoc
+    snapshot_status     = available
+  EOT
 }
 
 resource "aws_db_snapshot" "this" {

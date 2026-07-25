@@ -25,6 +25,17 @@ resource "tensor9_command" "this" {
   description = "List open TCP/UDP sockets on the host (ss -tunap), optionally filtered by state. Read-only."
   icon        = "network"
   data_access = ["Network"]
+  example_output = <<-EOT
+    Netid State  Recv-Q Send-Q Local Address:Port  Peer Address:Port Process
+    tcp   LISTEN 0      128    0.0.0.0:22          0.0.0.0:*         users:(("sshd",pid=934,fd=3))
+    tcp   LISTEN 0      511    0.0.0.0:80          0.0.0.0:*         users:(("nginx",pid=2189,fd=6),("nginx",pid=2188,fd=6),("nginx",pid=2184,fd=6))
+    tcp   LISTEN 0      511    0.0.0.0:443         0.0.0.0:*         users:(("nginx",pid=2189,fd=8),("nginx",pid=2188,fd=8),("nginx",pid=2184,fd=8))
+    tcp   LISTEN 0      511    127.0.0.1:3000      0.0.0.0:*         users:(("node",pid=3187,fd=19))
+    tcp   LISTEN 0      244    127.0.0.1:5432      0.0.0.0:*         users:(("postgres",pid=2490,fd=7))
+    tcp   LISTEN 0      4096   127.0.0.1:9099      0.0.0.0:*         users:(("tensor9-applia",pid=4471,fd=8))
+    tcp   LISTEN 0      4096   127.0.0.1:9100      0.0.0.0:*         users:(("tensor9-applia",pid=4471,fd=11))
+    tcp   LISTEN 0      128    [::]:22             [::]:*           users:(("sshd",pid=934,fd=4))
+  EOT
 }
 
 resource "null_resource" "ss" {

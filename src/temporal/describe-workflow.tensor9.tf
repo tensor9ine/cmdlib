@@ -44,6 +44,30 @@ resource "tensor9_command" "this" {
   description = "Fetch the full execution history summary for a single workflow — pending activities, last event, retry attempts, current state. The go-to drill-down once a workflow ID has been identified as suspect."
   icon        = "search"
   data_access = ["CustomResources"]
+  example_output = <<-EOT
+    Execution Info:
+      WorkflowId     order-8f31c2a9
+      RunId          01912f3a-6b7c-4d2e-9a1b-0c3d4e5f6a7b
+      Type           OrderWorkflow
+      Namespace      default
+      TaskQueue      orders
+      Status         Running
+      HistoryLength  47
+      StartTime      2026-07-25T14:02:11Z
+      CloseTime      <nil>
+
+    Pending Activities:
+      ActivityId    ActivityType    State       Attempt  MaximumAttempts  LastFailure
+      3             ChargeCard      Started     4        10               activity error (type: ChargeCard): 503 payment-gateway unavailable
+
+    Recent Events:
+      6   WorkflowTaskCompleted     2026-07-25T14:02:13Z
+      7   ActivityTaskScheduled     2026-07-25T14:02:13Z  ReserveInventory
+      8   ActivityTaskCompleted     2026-07-25T14:02:15Z
+      9   ActivityTaskScheduled     2026-07-25T14:02:15Z  ChargeCard
+      10  ActivityTaskStarted       2026-07-25T14:02:15Z  attempt 1
+      11  ActivityTaskFailed        2026-07-25T14:04:31Z  503 payment-gateway unavailable (will retry)
+  EOT
 }
 
 resource "null_resource" "describe" {

@@ -33,6 +33,20 @@ resource "tensor9_command" "this" {
   icon         = "shield-check"
   data_access  = ["Storage"]
   side_effects = ["ebs-snapshot"]
+  example_output = <<-EOT
+    Created EBS snapshot snap-0a1b2c3d4e5f6a7b8 from volume vol-0f1e2d3c4b5a69788.
+
+    SnapshotId    snap-0a1b2c3d4e5f6a7b8
+    VolumeId      vol-0f1e2d3c4b5a69788
+    State         completed
+    Progress      100%
+    VolumeSize    200 GiB
+    StartTime     2026-07-25T14:30:12Z
+    Description   ad-hoc snapshot via t9 ops cmd
+
+    snapshot_id  = snap-0a1b2c3d4e5f6a7b8
+    snapshot_arn = arn:aws:ec2:us-east-1:123456789012:snapshot/snap-0a1b2c3d4e5f6a7b8
+  EOT
 }
 
 resource "aws_ebs_snapshot" "this" {

@@ -40,6 +40,16 @@ resource "tensor9_command" "this" {
   icon         = "database"
   data_access  = ["Storage"]
   side_effects = ["ebs-snapshot", "volume-resize"]
+  example_output = <<-EOT
+    ==> Step 1/2: Snapshotting volume vol-0f1e2d3c4b5a69788 before resize
+        snapshot snap-0a1b2c3d4e5f6a7b8 created from vol-0f1e2d3c4b5a69788 (200 GiB)
+        waiting for state=completed... completed (19s)
+    ==> Step 2/2: Growing vol-0f1e2d3c4b5a69788 to 500 GiB
+        modification state: modifying (0%)
+        modification state: optimizing (100%)
+        vol-0f1e2d3c4b5a69788 resized 200 -> 500 GiB
+    ✓ Completed in 33s — snapshot snap-0a1b2c3d4e5f6a7b8, volume now 500 GiB (grow the guest filesystem separately)
+  EOT
 }
 
 resource "aws_ebs_snapshot" "pre_resize" {

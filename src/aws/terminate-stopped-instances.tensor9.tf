@@ -41,6 +41,19 @@ resource "tensor9_command" "this" {
   icon         = "trash"
   data_access  = ["Infrastructure"]
   side_effects = ["ec2-termination"]
+  example_output = <<-EOT
+    Terminating 2 instance(s) stopped since before 2026-06-25T14:30:12Z.
+
+    instance_id          previous_state  current_state
+    i-0d4e5f6a7b8c9d0e1  stopped         shutting-down
+    i-0e5f6a7b8c9d0e1f2  stopped         shutting-down
+
+    terminated_instance_ids = [
+      "i-0d4e5f6a7b8c9d0e1",
+      "i-0e5f6a7b8c9d0e1f2",
+    ]
+    cutoff_timestamp = 2026-06-25T14:30:12Z
+  EOT
 }
 
 data "aws_instances" "stopped" {

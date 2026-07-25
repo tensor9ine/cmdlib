@@ -35,6 +35,29 @@ resource "tensor9_command" "this" {
   description = "List the top LIMIT processes on the host sorted by CPU or memory. Read-only."
   icon        = "activity"
   data_access = ["Infrastructure"]
+  example_output = <<-EOT
+        PID USER       %CPU %MEM COMMAND
+       3187 node       12.4  3.1 node
+       3201 node        9.8  2.9 node
+       2490 postgres    6.1  4.7 postgres
+       2517 postgres    4.3  1.2 postgres
+       2184 root        2.1  0.2 nginx
+       2188 nginx       1.7  0.3 nginx
+       2189 nginx       1.5  0.3 nginx
+       1122 root        1.2  0.6 dockerd
+       1098 root        0.9  0.4 containerd
+       4471 tensor9     0.7  0.2 tensor9-applianc
+       2492 postgres    0.5  3.9 postgres
+       2491 postgres    0.4  0.8 postgres
+        892 root        0.3  0.1 systemd-journal
+          1 root        0.2  0.1 systemd
+        934 root        0.2  0.1 sshd
+       2493 postgres    0.1  0.5 postgres
+       3402 root        0.1  0.1 containerd-shim
+       1201 root        0.0  0.1 amazon-ssm-agen
+        701 chrony      0.0  0.0 chronyd
+        955 root        0.0  0.1 crond
+  EOT
 }
 
 resource "null_resource" "top" {

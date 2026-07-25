@@ -31,6 +31,15 @@ resource "tensor9_command" "this" {
   description = "Tail unified-logging events from the last WINDOW (replaces dmesg/journalctl on macOS). Read-only."
   icon        = "file-text"
   data_access = ["Logs"]
+  example_output = <<-EOT
+    2026-07-25 14:28:03.114217-0700 Df kernel[0:1a2b] (Sandbox) tensor9-appliance(832) allow(1) network-outbound 34.117.59.81:8443
+    2026-07-25 14:28:05.902411-0700 In tensor9-appliance[832:12841] [com.tensor9.appliance:sip] tunnel heartbeat ok seq=48211 rtt=11ms
+    2026-07-25 14:28:11.338902-0700 Df node[1204:13002] [com.tensor9.appliance:runtime] GET /healthz 200 3ms
+    2026-07-25 14:28:19.771120-0700 Df postgres[998:9f01] [org.postgresql:checkpoint] checkpoint complete: wrote 812 buffers
+    2026-07-25 14:28:24.004518-0700 Er tensor9-appliance[832:12841] [com.tensor9.appliance:sip] control-plane dial failed: i/o timeout (attempt 1/3)
+    2026-07-25 14:28:24.559803-0700 In tensor9-appliance[832:12841] [com.tensor9.appliance:sip] control-plane reconnected prod-1.tensor9.com:8443
+    2026-07-25 14:28:41.220774-0700 Df kernel[0:1a2b] (AppleMobileFileIntegrity) unrestrict process 1204
+  EOT
 }
 
 resource "null_resource" "log_show" {

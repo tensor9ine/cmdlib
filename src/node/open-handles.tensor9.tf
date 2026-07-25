@@ -65,6 +65,23 @@ resource "tensor9_command" "this" {
   description = "Enumerate active handles (timers, sockets, file descriptors) and active requests keeping the Node event loop alive via process._getActiveHandles / _getActiveRequests. Useful for diagnosing why a Node process won't exit cleanly."
   icon        = "search"
   data_access = ["Metrics"]
+  example_output = <<-EOT
+    {
+      "handles": [
+        "Server",
+        "Socket",
+        "Socket",
+        "Socket",
+        "Timeout",
+        "Pipe",
+        "WriteStream"
+      ],
+      "requests": [
+        "TCPConnectWrap",
+        "GetAddrInfoReqWrap"
+      ]
+    }
+  EOT
 }
 
 resource "null_resource" "handles" {

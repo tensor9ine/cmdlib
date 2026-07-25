@@ -25,6 +25,13 @@ resource "tensor9_command" "this" {
   description = "Show human-readable disk usage (df -h) for mounts under MOUNT_PREFIX. Read-only."
   icon        = "disk"
   data_access = ["Storage"]
+  example_output = <<-EOT
+    Filesystem       Size  Used Avail Use% Mounted on
+    /dev/nvme0n1p1    97G   58G   39G  60% /
+    /dev/nvme1n1     500G  213G  288G  43% /var/lib/docker
+    /dev/nvme2n1     200G  147G   53G  74% /var/lib/postgresql
+    tmpfs             16G  1.4M   16G   1% /run
+  EOT
 }
 
 resource "null_resource" "df" {

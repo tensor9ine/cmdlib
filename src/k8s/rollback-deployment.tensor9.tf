@@ -59,6 +59,13 @@ resource "tensor9_command" "this" {
   icon         = "rewind"
   data_access  = ["Infrastructure"]
   side_effects = ["pod-restarts", "rollout-rollback"]
+  example_output = <<-EOT
+    deployment.apps/api rolled back
+    Waiting for deployment "api" rollout to finish: 2 out of 4 new replicas have been updated...
+    Waiting for deployment "api" rollout to finish: 3 out of 4 new replicas have been updated...
+    Waiting for deployment "api" rollout to finish: 1 old replicas are pending termination...
+    deployment "api" successfully rolled out
+  EOT
 }
 
 resource "null_resource" "rollback" {

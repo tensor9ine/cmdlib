@@ -36,6 +36,12 @@ resource "tensor9_command" "this" {
   description = "Cluster-wide node inventory: capacity, allocatable, conditions, taints, instance type, and kernel/kubelet versions. Answers `is the cluster healthy?` in one shot."
   icon        = "list"
   data_access = ["Infrastructure"]
+  example_output = <<-EOT
+    NAME                         STATUS   ROLES    AGE   VERSION   INTERNAL-IP   INSTANCE-TYPE   ZONE         KERNEL-VERSION                    CONTAINER-RUNTIME
+    ip-10-0-12-34.ec2.internal   Ready    <none>   28d   v1.29.6   10.0.12.34    m6i.2xlarge     us-east-1a   6.1.102-108.177.amzn2023.x86_64   containerd://1.7.11
+    ip-10-0-45-67.ec2.internal   Ready    <none>   28d   v1.29.6   10.0.45.67    m6i.2xlarge     us-east-1b   6.1.102-108.177.amzn2023.x86_64   containerd://1.7.11
+    ip-10-0-89-10.ec2.internal   Ready    <none>   28d   v1.29.6   10.0.89.10    m6i.2xlarge     us-east-1c   6.1.102-108.177.amzn2023.x86_64   containerd://1.7.11
+  EOT
 }
 
 data "kubernetes_resources" "nodes" {

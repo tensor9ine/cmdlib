@@ -40,6 +40,12 @@ resource "tensor9_command" "this" {
   description = "List running EC2 instances whose average CPU utilization is below MAX_CPU_PERCENT% over the last 24h. Read-only."
   icon        = "search"
   data_access = ["Infrastructure", "Metrics"]
+  example_output = <<-EOT
+    instance_id          avg_cpu_pct
+    i-0a1b2c3d4e5f6a7b8  1.87
+    i-0b2c3d4e5f6a7b8c9  3.42
+    i-0c3d4e5f6a7b8c9d0  0.61
+  EOT
 }
 
 # aws-provider 6.x removed `aws_cloudwatch_metric_data`; fall back to

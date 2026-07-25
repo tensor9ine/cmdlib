@@ -45,6 +45,15 @@ resource "tensor9_command" "this" {
   description = "Diagnostic: list workflows that ended in Failed, TimedOut, or Terminated state within the last HOURS. Starting point for post-incident review or batch reset."
   icon        = "alert"
   data_access = ["CustomResources"]
+  example_output = <<-EOT
+    WorkflowId      RunId                                 Type           Status      StartTime
+    order-9a72be4f  01912ef0-5a6b-4c7d-8e9f-0a1b2c3d4e5f  OrderWorkflow  Failed      2026-07-25T09:14:22Z
+    order-1c58fa30  01912ef1-6b7c-4d8e-9f0a-1b2c3d4e5f60  OrderWorkflow  TimedOut    2026-07-25T10:41:07Z
+    order-b6e3d91c  01912ef2-7c8d-4e9f-a01b-2c3d4e5f6071  OrderWorkflow  Terminated  2026-07-25T11:58:36Z
+    order-4f0a2d77  01912ef3-8d9e-4f0a-b12c-3d4e5f607182  OrderWorkflow  Failed      2026-07-25T12:33:49Z
+
+    4 workflows in namespace default over the last 24h (task queue orders)
+  EOT
 }
 
 resource "null_resource" "list" {

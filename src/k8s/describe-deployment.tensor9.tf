@@ -55,6 +55,32 @@ resource "tensor9_command" "this" {
   description = "Full status snapshot of a Deployment: replica counts, rollout conditions, strategy, image, and selector. Read-only equivalent of `kubectl describe deploy`."
   icon        = "info"
   data_access = ["Infrastructure"]
+  example_output = <<-EOT
+    Name:                   api
+    Namespace:              default
+    CreationTimestamp:      Tue, 27 Jun 2026 18:02:11 +0000
+    Labels:                 app=api
+    Annotations:            deployment.kubernetes.io/revision: 7
+    Selector:               app=api
+    Replicas:               4 desired | 4 updated | 4 total | 4 available | 0 unavailable
+    StrategyType:           RollingUpdate
+    RollingUpdateStrategy:  25% max unavailable, 25% max surge
+    Pod Template:
+      Labels:  app=api
+      Containers:
+       api:
+        Image:  acme/api:v2.4.0
+        Port:   8080/TCP
+        Requests:
+          cpu:     250m
+          memory:  256Mi
+    Conditions:
+      Type           Status  Reason
+      Available      True    MinimumReplicasAvailable
+      Progressing    True    NewReplicaSetAvailable
+    OldReplicaSets:  <none>
+    NewReplicaSet:   api-7f9c8d4b6 (4/4 replicas created)
+  EOT
 }
 
 data "kubernetes_resource" "deployment" {

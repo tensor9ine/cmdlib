@@ -56,6 +56,9 @@ resource "tensor9_command" "this" {
   icon         = "refresh"
   data_access  = ["Infrastructure"]
   side_effects = ["pod-restarts"]
+  example_output = <<-EOT
+    deployment.apps/web restarted
+  EOT
 }
 
 resource "kubernetes_annotations" "rollout_trigger" {

@@ -73,6 +73,18 @@ resource "tensor9_command" "this" {
   description = "Read a file from inside a specific Kubernetes pod's container filesystem (capped at MAX_BYTES). Read-only — no mutation of pod state."
   icon        = "file-text"
   data_access = ["Logs", "Infrastructure"]
+  example_output = <<-EOT
+    server:
+      listen: 0.0.0.0:8080
+      workers: 8
+    database:
+      host: acme-prod.cluster-abc123.us-east-1.rds.amazonaws.com
+      port: 5432
+      pool_size: 20
+    cache:
+      endpoint: acme-prod.abc123.ng.0001.use1.cache.amazonaws.com:6379
+    log_level: info
+  EOT
 }
 
 resource "null_resource" "read" {

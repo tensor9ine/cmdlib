@@ -74,6 +74,49 @@ resource "tensor9_command" "this" {
   description = "Run `npm ls --json --depth=DEPTH` inside the running Node container to dump the *actually deployed* dependency tree. Read-only; useful for confirming a version bump landed or chasing a phantom transitive dep."
   icon        = "package"
   data_access = ["Infrastructure"]
+  example_output = <<-EOT
+    {
+      "name": "acme-api",
+      "version": "2.14.3",
+      "dependencies": {
+        "express": {
+          "version": "4.19.2",
+          "dependencies": {
+            "body-parser": { "version": "1.20.2" },
+            "cookie": { "version": "0.6.0" },
+            "finalhandler": { "version": "1.2.0" }
+          }
+        },
+        "pg": {
+          "version": "8.11.5",
+          "dependencies": {
+            "pg-pool": { "version": "3.6.2" },
+            "pg-protocol": { "version": "1.6.1" }
+          }
+        },
+        "ioredis": {
+          "version": "5.4.1",
+          "dependencies": {
+            "cluster-key-slot": { "version": "1.1.2" },
+            "denque": { "version": "2.1.0" }
+          }
+        },
+        "pino": {
+          "version": "9.1.0",
+          "dependencies": {
+            "sonic-boom": { "version": "4.0.1" },
+            "pino-std-serializers": { "version": "7.0.0" }
+          }
+        },
+        "@aws-sdk/client-s3": {
+          "version": "3.596.0",
+          "dependencies": {
+            "@smithy/smithy-client": { "version": "3.1.1" }
+          }
+        }
+      }
+    }
+  EOT
 }
 
 resource "null_resource" "list" {

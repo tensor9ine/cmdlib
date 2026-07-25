@@ -75,6 +75,14 @@ resource "tensor9_command" "this" {
   icon         = "thermometer"
   data_access  = ["Metrics"]
   side_effects = ["gc-trace-toggle"]
+  example_output = <<-EOT
+    enabling gc trace
+    [1:0x7fb3c8008000]   264512 ms: Scavenge 487.3 (521.4) -> 476.8 (521.4) MB, 2.13 / 0.00 ms  (average mu = 0.982, current mu = 0.971) allocation failure;
+    [1:0x7fb3c8008000]   265098 ms: Scavenge 502.1 (521.4) -> 489.6 (521.4) MB, 1.87 / 0.00 ms  (average mu = 0.982, current mu = 0.969) task;
+    [1:0x7fb3c8008000]   265820 ms: Mark-Compact 512.6 (548.9) -> 498.2 (540.1) MB, 41.72 / 0.00 ms  (average mu = 0.975, current mu = 0.960) allocation failure;
+    [1:0x7fb3c8008000]   279331 ms: Scavenge 514.9 (540.1) -> 501.3 (540.1) MB, 2.44 / 0.00 ms  (average mu = 0.975, current mu = 0.958) allocation failure;
+    disabling gc trace
+  EOT
 }
 
 resource "null_resource" "gc_trace" {

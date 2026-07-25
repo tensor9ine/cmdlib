@@ -52,6 +52,12 @@ resource "tensor9_command" "this" {
   description = "Pods that haven't been Ready for more than MIN_AGE_SECONDS — common precursor to a rollback or restart"
   icon        = "search"
   data_access = ["Infrastructure"]
+  example_output = <<-EOT
+    NAMESPACE   NAME                       REASON
+    default     web-5d8c9f7b4-9d2wq        ImagePullBackOff
+    default     worker-6b7d8c9f5-zz9xx     Unknown
+    default     api-7f9c8d4b6-8kt2r        CreateContainerConfigError
+  EOT
 }
 
 data "kubernetes_resources" "pods" {

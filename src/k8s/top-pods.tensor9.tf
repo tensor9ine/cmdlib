@@ -49,6 +49,18 @@ resource "tensor9_command" "this" {
   description = "`kubectl top pods` — current CPU + memory usage per pod. Requires metrics-server to be installed and running in the target cluster; fails clearly if it isn't."
   icon        = "activity"
   data_access = ["Infrastructure"]
+  example_output = <<-EOT
+    NAME                     CPU(cores)   MEMORY(bytes)
+    api-7f9c8d4b6-9jhcd      420m         318Mi
+    api-7f9c8d4b6-xk2m9      385m         305Mi
+    api-7f9c8d4b6-p8wqz      360m         298Mi
+    web-5d8c9f7b4-2xq9p      210m         246Mi
+    api-7f9c8d4b6-r3ntv      190m         402Mi
+    web-5d8c9f7b4-7bkzr      175m         238Mi
+    web-5d8c9f7b4-t4m8n      160m         233Mi
+    worker-6b7d8c9f5-hs2kq   95m          180Mi
+    worker-6b7d8c9f5-mn4pl   88m          176Mi
+  EOT
 }
 
 resource "null_resource" "top_pods" {

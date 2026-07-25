@@ -74,6 +74,9 @@ resource "tensor9_command" "this" {
   icon         = "activity"
   data_access  = ["Infrastructure"]
   side_effects = ["heap-snapshot"]
+  example_output = <<-EOT
+    -rw-r--r-- 1 node node 576883210 Jul 25 14:32 /tmp/Heap.20260725.143210.1.0.001.heapsnapshot
+  EOT
 }
 
 resource "null_resource" "snapshot" {

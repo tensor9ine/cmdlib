@@ -71,6 +71,19 @@ resource "tensor9_command" "this" {
   description = "Fetch the trailing LINES of stderr-side log output from a specific container in a pod. Distinct from the generic tail-pod-logs in that CONTAINER is required, so multi-container pods (app + sidecar) yield the app stream unambiguously."
   icon        = "logs"
   data_access = ["Logs"]
+  example_output = <<-EOT
+    2026-07-25T14:29:58.113Z WARN  (api/1): pg pool: acquire slow (1274ms), 20/20 connections in use — pool exhausted
+    2026-07-25T14:30:02.451Z WARN  (api/1): ioredis reconnecting (attempt 3) to redis.acme-prod.svc.cluster.local:6379
+    2026-07-25T14:30:12.889Z DEBUG (api/1): cache miss for key user:$${userId} — falling back to pg
+    2026-07-25T14:30:12.903Z ERROR (api/1): unhandledRejection: TimeoutError: Redis command timed out
+        at Timeout._onTimeout (/app/node_modules/ioredis/built/Command.js:184:33)
+        at listOnTimeout (node:internal/timers:573:17)
+        at process.processTimers (node:internal/timers:514:7)
+    2026-07-25T14:31:05.220Z ERROR (api/1): TypeError: Cannot read properties of undefined (reading 'id')
+        at getUser (/app/dist/handlers/user.js:42:19)
+        at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    (node:1) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 error listeners added to [Socket]. Use emitter.setMaxListeners() to increase limit
+  EOT
 }
 
 resource "null_resource" "tail" {

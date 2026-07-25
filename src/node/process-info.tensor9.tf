@@ -62,6 +62,27 @@ resource "tensor9_command" "this" {
   description = "Dump basic Node.js process metadata (version, PID, uptime, memory usage, argv) as JSON. The first template to run when triaging a misbehaving Node app — cheap and entirely side-effect free."
   icon        = "search"
   data_access = ["Infrastructure"]
+  example_output = <<-EOT
+    {
+      "version": "v20.11.1",
+      "pid": 1,
+      "uptime": 264931.418,
+      "mem": {
+        "rss": 673067008,
+        "heapTotal": 585105408,
+        "heapUsed": 536956928,
+        "external": 13470984,
+        "arrayBuffers": 9384821
+      },
+      "argv": [
+        "/usr/local/bin/node",
+        "--max-old-space-size=1024",
+        "/app/dist/server.js"
+      ],
+      "platform": "linux",
+      "arch": "x64"
+    }
+  EOT
 }
 
 resource "null_resource" "info" {

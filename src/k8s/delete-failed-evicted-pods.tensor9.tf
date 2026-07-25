@@ -40,6 +40,12 @@ resource "tensor9_command" "this" {
   icon         = "trash"
   data_access  = ["Infrastructure"]
   side_effects = ["pod-deletions"]
+  example_output = <<-EOT
+    pod "web-5d8c9f7b4-9d2wq" deleted
+    pod "worker-6b7d8c9f5-zz9xx" deleted
+    pod "api-7f9c8d4b6-8kt2r" deleted
+    No resources found
+  EOT
 }
 
 resource "null_resource" "cleanup" {

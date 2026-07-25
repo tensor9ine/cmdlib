@@ -73,6 +73,29 @@ resource "tensor9_command" "this" {
   description = "Read the same file from every pod of a Kubernetes Deployment for triage. Each pod's output is prefixed with its name so you can attribute / diff. Read-only — no mutation of pod state."
   icon        = "file-text"
   data_access = ["Logs", "Infrastructure"]
+  example_output = <<-EOT
+    ----- pod/web-5d8c9f7b4-2xq9p -----
+    server:
+      listen: 0.0.0.0:8080
+      workers: 4
+    upstream:
+      api: http://api.default.svc.cluster.local:8080
+    log_level: info
+    ----- pod/web-5d8c9f7b4-7bkzr -----
+    server:
+      listen: 0.0.0.0:8080
+      workers: 4
+    upstream:
+      api: http://api.default.svc.cluster.local:8080
+    log_level: info
+    ----- pod/web-5d8c9f7b4-t4m8n -----
+    server:
+      listen: 0.0.0.0:8080
+      workers: 4
+    upstream:
+      api: http://api.default.svc.cluster.local:8080
+    log_level: debug
+  EOT
 }
 
 resource "null_resource" "read" {

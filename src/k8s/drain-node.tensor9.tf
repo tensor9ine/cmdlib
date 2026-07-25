@@ -49,6 +49,17 @@ resource "tensor9_command" "this" {
   icon         = "shield"
   data_access  = ["Infrastructure"]
   side_effects = ["node-drain", "pod-evictions"]
+  example_output = <<-EOT
+    node/ip-10-0-12-34.ec2.internal cordoned
+    Warning: ignoring DaemonSet-managed Pods: kube-system/aws-node-7k2mp, kube-system/kube-proxy-x9d4n
+    evicting pod default/web-5d8c9f7b4-2xq9p
+    evicting pod payments/ledger-6c8f9d7b5-qr4mn
+    evicting pod default/api-7f9c8d4b6-xk2m9
+    pod/web-5d8c9f7b4-2xq9p evicted
+    pod/api-7f9c8d4b6-xk2m9 evicted
+    pod/ledger-6c8f9d7b5-qr4mn evicted
+    node/ip-10-0-12-34.ec2.internal drained
+  EOT
 }
 
 resource "null_resource" "drain" {

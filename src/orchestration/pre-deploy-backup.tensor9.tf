@@ -76,6 +76,19 @@ resource "tensor9_command" "this" {
   icon         = "shield-check"
   data_access  = ["Infrastructure", "Storage"]
   side_effects = ["ebs-snapshot", "pod-scaling", "ssm-write"]
+  example_output = <<-EOT
+    ==> Step 1/3: Snapshotting DB volume vol-0f1e2d3c4b5a69788
+        snapshot snap-0a1b2c3d4e5f6a7b8 created from vol-0f1e2d3c4b5a69788
+        waiting for state=completed... completed (24s)
+        annotated deployment.apps/api: tensor9.com/quiesced-at=2026-07-25T14:32:07Z
+    ==> Step 2/3: Quiescing api in namespace production (scale to 0)
+        Updated context arn:aws:eks:us-east-1:123456789012:cluster/acme-prod in ~/.kube/config
+        deployment.apps/api scaled to 0 replicas
+    ==> Step 3/3: Writing deploy-in-progress flag to SSM /acme/deploy/state
+        put parameter /acme/deploy/state (Version 7)
+        value: {"state":"deploy-in-progress","snapshot_id":"snap-0a1b2c3d4e5f6a7b8","deployment":"production/api","set_at":"2026-07-25T14:32:31Z"}
+    ✓ Completed in 41s — snapshot snap-0a1b2c3d4e5f6a7b8, api quiesced, flag set
+  EOT
 }
 
 resource "aws_ebs_snapshot" "db" {

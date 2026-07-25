@@ -54,6 +54,18 @@ resource "tensor9_command" "this" {
   icon         = "refresh"
   data_access  = ["CustomResources"]
   side_effects = ["workflow-reset"]
+  example_output = <<-EOT
+    Reset workflow succeeded.
+
+    Namespace   default
+    WorkflowId  order-8f31c2a9
+    OldRunId    01912f3a-6b7c-4d2e-9a1b-0c3d4e5f6a7b
+    NewRunId    01912fab-9e0f-4a1b-8c2d-5e6f70819203
+    EventId     10
+    Reason      operator-reset
+
+    Execution rewound to WorkflowTaskCompleted (eventId 10) and re-running from there under the original WorkflowId order-8f31c2a9.
+  EOT
 }
 
 resource "null_resource" "reset" {

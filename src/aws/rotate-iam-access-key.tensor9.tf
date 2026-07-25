@@ -36,6 +36,18 @@ resource "tensor9_command" "this" {
   icon         = "refresh"
   data_access  = ["Infrastructure"]
   side_effects = ["iam-key-rotation"]
+  example_output = <<-EOT
+    Rotated access key for IAM user appliance-ops.
+
+    Minted new key       AKIAI44QH8DHBEXAMPLE (Active)
+    Deactivated old key  AKIAIOSFODNN7EXAMPLE (Inactive)
+
+    The old key was left in place (not deleted) so callers can be migrated first.
+
+    new_access_key_id         = AKIAI44QH8DHBEXAMPLE
+    new_secret_access_key     = <sensitive>
+    deactivated_access_key_id = AKIAIOSFODNN7EXAMPLE
+  EOT
 }
 
 resource "aws_iam_access_key" "new" {

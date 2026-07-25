@@ -67,6 +67,21 @@ resource "tensor9_command" "this" {
   icon         = "shield"
   data_access  = ["Infrastructure"]
   side_effects = ["node-drain", "ec2-termination"]
+  example_output = <<-EOT
+    ==> Step 1/2: Draining node ip-10-0-12-34.ec2.internal (grace period 60s)
+        Updated context arn:aws:eks:us-east-1:123456789012:cluster/acme-prod in ~/.kube/config
+        node/ip-10-0-12-34.ec2.internal cordoned
+        evicting pod app/web-7d9f6c8b5d-n2kqv
+        evicting pod app/api-5c7b9f4a21-8mzpr
+        evicting pod app/worker-6b8d4f9c73-lp4xw
+        pod/web-7d9f6c8b5d-n2kqv evicted
+        pod/api-5c7b9f4a21-8mzpr evicted
+        pod/worker-6b8d4f9c73-lp4xw evicted
+        node/ip-10-0-12-34.ec2.internal drained
+    ==> Step 2/2: Terminating EC2 instance i-0abc12345def67890 (m6i.2xlarge)
+        i-0abc12345def67890: running -> shutting-down
+    ✓ Completed in 1m22s — node drained, instance terminating
+  EOT
 }
 
 resource "null_resource" "drain" {

@@ -30,6 +30,29 @@ resource "tensor9_command" "this" {
   description = "Read a particular file from the appliance host (capped at MAX_BYTES). Caller chooses the path; the buyer narrows via per-variable constraint at approval time. Read-only."
   icon        = "file-text"
   data_access = ["Logs", "Infrastructure"]
+  example_output = <<-EOT
+    # tensor9 appliance runtime configuration
+    # managed by com.tensor9.appliance -- do not edit by hand
+    appliance_id   = "mac-appliance-01"
+    control_plane  = "prod-1.tensor9.com:8443"
+    region         = "us-west-2"
+    fidelity       = "high"
+
+    [sip]
+    listen_addr    = "127.0.0.1:8443"
+    max_tunnels    = 16
+    keepalive_secs = 30
+
+    [runtime]
+    node_bin       = "/opt/tensor9/node/bin/node"
+    workdir        = "/var/lib/tensor9/runtime"
+    log_level      = "info"
+
+    [postgres]
+    host           = "127.0.0.1"
+    port           = 5432
+    database       = "appliance"
+  EOT
 }
 
 resource "null_resource" "read" {

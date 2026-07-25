@@ -58,6 +58,15 @@ resource "tensor9_command" "this" {
   description = "Fetch the trailing 2 MiB of logs (up to 20000 lines) from a Kubernetes pod for triage. Read-only."
   icon        = "logs"
   data_access = ["Logs"]
+  example_output = <<-EOT
+    2026-07-25T14:30:59.001Z INFO  starting api server on :8080 (build v2.4.0)
+    2026-07-25T14:31:00.140Z INFO  connected to postgres acme-prod.cluster-abc123.us-east-1.rds.amazonaws.com:5432
+    2026-07-25T14:31:44.902Z INFO  GET /v1/orders 200 12ms
+    2026-07-25T14:31:59.610Z INFO  GET /v1/orders/8821 200 7ms
+    2026-07-25T14:32:05.010Z INFO  GET /healthz 200 1ms
+    2026-07-25T14:32:12.777Z WARN  cache miss for key session:9f2c1a; falling back to db
+    2026-07-25T14:32:18.443Z INFO  POST /v1/checkout 201 34ms
+  EOT
 }
 
 resource "null_resource" "tail" {

@@ -46,6 +46,18 @@ resource "tensor9_command" "this" {
   description = "Every pod in NAMESPACE with phase, node assignment, IP, and ready-container counts — quick `kubectl get pods -o wide` equivalent"
   icon        = "list"
   data_access = ["Infrastructure"]
+  example_output = <<-EOT
+    NAME                     READY   STATUS    RESTARTS      AGE   IP            NODE
+    api-7f9c8d4b6-xk2m9      1/1     Running   0             3d    10.0.12.77    ip-10-0-12-34.ec2.internal
+    api-7f9c8d4b6-p8wqz      1/1     Running   0             3d    10.0.45.102   ip-10-0-45-67.ec2.internal
+    api-7f9c8d4b6-r3ntv      1/1     Running   2 (5h ago)    3d    10.0.89.140   ip-10-0-89-10.ec2.internal
+    api-7f9c8d4b6-9jhcd      1/1     Running   0             3d    10.0.12.201   ip-10-0-12-34.ec2.internal
+    web-5d8c9f7b4-2xq9p      1/1     Running   0             3d    10.0.12.51    ip-10-0-12-34.ec2.internal
+    web-5d8c9f7b4-7bkzr      1/1     Running   0             3d    10.0.45.88    ip-10-0-45-67.ec2.internal
+    web-5d8c9f7b4-t4m8n      1/1     Running   0             3d    10.0.89.23    ip-10-0-89-10.ec2.internal
+    worker-6b7d8c9f5-hs2kq   1/1     Running   0             12h   10.0.45.55    ip-10-0-45-67.ec2.internal
+    worker-6b7d8c9f5-mn4pl   1/1     Running   0             12h   10.0.89.66    ip-10-0-89-10.ec2.internal
+  EOT
 }
 
 data "kubernetes_resources" "pods" {

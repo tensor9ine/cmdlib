@@ -56,6 +56,14 @@ resource "tensor9_command" "this" {
   description = "Pull the most recent Warning-type events in a namespace — the fastest way to see what the control plane is unhappy about (FailedScheduling, OOMKilled, ImagePullBackOff, etc.)."
   icon        = "alert"
   data_access = ["Infrastructure"]
+  example_output = <<-EOT
+    LAST SEEN   OBJECT                        REASON             MESSAGE
+    25s         pod/api-7f9c8d4b6-r3ntv       BackOff            Back-off restarting failed container "api" in pod api-7f9c8d4b6-r3ntv
+    2m          pod/web-5d8c9f7b4-9d2wq       Failed             Failed to pull image "acme/web:v2.4.1": manifest unknown
+    4m          pod/web-5d8c9f7b4-9d2wq       ImagePullBackOff   Back-off pulling image "acme/web:v2.4.1"
+    9m          pod/worker-6b7d8c9f5-zz9xx    FailedScheduling   0/3 nodes are available: 3 Insufficient cpu
+    16m         pod/api-7f9c8d4b6-p8wqz       Unhealthy          Liveness probe failed: Get "http://10.0.45.102:8080/healthz": dial tcp 10.0.45.102:8080: connect: connection refused
+  EOT
 }
 
 data "kubernetes_resources" "events" {

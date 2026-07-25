@@ -54,6 +54,17 @@ resource "tensor9_command" "this" {
   icon         = "play"
   data_access  = ["CustomResources"]
   side_effects = ["workflow-signaled"]
+  example_output = <<-EOT
+    Signal workflow succeeded.
+
+    Namespace   default
+    WorkflowId  order-8f31c2a9
+    RunId       01912f3a-6b7c-4d2e-9a1b-0c3d4e5f6a7b
+    Signal      approvePayment
+    Input       {}
+
+    The signal was recorded in workflow history as WorkflowExecutionSignaled (eventId 48).
+  EOT
 }
 
 resource "null_resource" "signal" {
